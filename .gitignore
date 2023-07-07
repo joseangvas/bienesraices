@@ -1,8 +1,7 @@
 # CARPETAS
 
 # Dependencias:
-node_modules/
-
+/node_modules
 
 
 # ARCHIVOS
