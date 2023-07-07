@@ -1,5 +1,8 @@
 # CARPETAS
 
+# Configuraciones:
+/.vscode
+
 # Dependencias:
 /node_modules
 
