@@ -16,12 +16,20 @@
             <img src="build/img/logo.svg"alt="Logotipo de Bienes Raíces">
           </a>
 
-          <nav class="navegacion">
-            <a href="nosotros.html">Nosotros</a>
-            <a href="anuncios.html">Anuncios</a>
-            <a href="blog.html">Blog</a>
-            <a href="contacto.html">Contacto</a>
-          </nav>
+          <div class="mobile-menu">
+            <img src="build/img/barras.svg" alt="Icono Menu Responsive">
+          </div>
+
+          <div class="derecha">
+            <img src="build/img/dark-mode.svg" alt="Imagen de Tema Oscuro" class="dark-mode-boton">
+
+            <nav class="navegacion">
+              <a href="nosotros.html">Nosotros</a>
+              <a href="anuncios.html">Anuncios</a>
+              <a href="blog.html">Blog</a>
+              <a href="contacto.html">Contacto</a>
+            </nav>
+          </div>
 
         </div>   <!-- .barra -->
       </div>
@@ -42,30 +50,30 @@
         <fieldset>
           <legend>Información Personal</legend>
 
-          <label for="nombre">Nombre</label>
+          <label for="nombre">Nombre:</label>
           <input type="text" placeholder="Tu Nombre" id="nombre">
 
-          <label for="email">E-Mail</label>
+          <label for="email">E-Mail:</label>
           <input type=email" placeholder="Tu Correo" id="email">
 
-          <label for="telefono">Telefono</label>
+          <label for="telefono">Telefono:</label>
           <input type="tel" placeholder="Tu Telefono" id="telefono">
 
           <label for="email">Mensaje:</label>
-          <textarea placeholder="Tu Correo" id="mensaje"></textarea>
+          <textarea placeholder="Escribe un Mensaje" id="mensaje"></textarea>
         </fieldset>
 
         <fieldset>
           <legend>Información sobre la Propiedad</legend>
 
-          <label for="opciones">Vende o Compra</label>
+          <label for="opciones">Vende o Compra:</label>
           <select id="opciones">
             <option value="" disabled selected>-- Seleccione --</option>
             <option value="Compra">Compra</option>
             <option value="Vende">Vende</option>
           </select>
 
-          <label for="presupuesto">Precio o Presupuesto</label>
+          <label for="presupuesto">Precio o Presupuesto:</label>
           <input type="number" placeholder="Tu Precio o Presupuesto" id="presupuesto">
         </fieldset>
 
@@ -74,10 +82,10 @@
 
           <p>Cómo desea ser Contactado:</p>
           <div class="forma-contacto">
-            <label for="contactar-telefono">Teléfono</label>
+            <label for="contactar-telefono">Teléfono:</label>
             <input name="contacto" type="radio" value="telefono" id="contactar-telefono">
 
-            <label for="contactar-email">E-mail</label>
+            <label for="contactar-email">E-mail:</label>
             <input name="contacto" type="radio" value="email" id="contactar-email">
           </div>
 
