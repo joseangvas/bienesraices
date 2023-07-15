@@ -4,11 +4,11 @@
   require '../../includes/config/database.php';
   $db = conectarDB();
 
-  if($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // echo "<pre>";
-    // var_dump($_POST);
-    // echo "</pre>";
+  // Arreglo con Mensaje de Errores
+  $errores = [];
 
+  // Ejecutar el Código después de que el Usuario envía el Formulario
+  if($_SERVER['REQUEST_METHOD'] === 'POST') {
     $titulo = $_POST['titulo'];
     $precio = $_POST['precio'];
     $descripcion = $_POST['descripcion'];
@@ -17,18 +17,53 @@
     $estacionamiento = $_POST['estacionamiento'];
     $vendedorId = $_POST['vendedor'];
 
-    // Insertar en la Base de Datos
-    $query = " INSERT INTO propiedades (titulo, precio, descripcion, habitaciones, wc, estacionamiento, vendedores_Id ) VALUES ( '$titulo', '$precio', '$descripcion', '$habitaciones', '$wc', '$estacionamiento', '$vendedorId' ) ";
+    // Validar entrada de Datos
+    if(!$titulo) {
+      $errores[] = "Debes Ingresar un Título";
+    }
+    
+    if(!$precio) {
+      $errores[] = "Debes Ingresar un Precio";
+    }
 
-    // echo $query;
+    if( strlen($descripcion) < 50 ) {
+      $errores[] = "Debes Ingresar Descripcion y Debe tener más de 50 Caracteres";
+    }
 
-    $resultado = mysqli_query($db, $query);
+    if(!$habitaciones) {
+      $errores[] = "Debes Ingresar Número de Habitaciones";
+    }
 
-    if($resultado) {
-      echo "Propiedad Insertada Correctamente";
-    } else {
-      echo "No se pudieron enviar Datos al Servidor";
-    };
+    if(!$wc) {
+      $errores[] = "Debes Ingresar Número de Baños";
+    }
+
+    if(!$estacionamiento) {
+      $errores[] = "Debes Ingresar Número de Estacionamientos";
+    }
+
+    // echo "<pre>";
+    // var_dump($errores);
+    // echo "</pre>";
+
+    exit;
+
+    // Revisar que el Array de Errores esté Vacío
+    if(empty($errores)) {
+        // Insertar en la Base de Datos
+      $query = " INSERT INTO propiedades (titulo, precio, descripcion, habitaciones, wc, estacionamiento, vendedores_Id ) VALUES ( '$titulo', '$precio', '$descripcion', '$habitaciones', '$wc', '$estacionamiento', '$vendedorId' ) ";
+
+      // echo $query;
+
+      $resultado = mysqli_query($db, $query);
+
+      if($resultado) {
+        echo "Propiedad Insertada Correctamente";
+      } else {
+        echo "No se pudieron enviar Datos al Servidor";
+      };
+    }
+
   };
   
   require '../../includes/funciones.php';
@@ -39,6 +74,12 @@
       <h1>Crear</h1>
 
       <a href="/admin/index.php" class="boton boton-verde">Volver</a>
+
+      <?php foreach($errores as $error): ?>
+        <div class="alerta error">
+          <?php echo $error; ?>
+        </div>
+      <?php endforeach; ?>
 
       <form class="formulario" method="POST" action="/admin/propiedades/crear.php">
         <fieldset>
