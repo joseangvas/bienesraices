@@ -109,9 +109,9 @@
 
       if($resultado) {
         // Redireccionar al Usuario
-        header('Location: /admin');
+        header('Location: /admin/index.php?resultado=1');
       };
-    }
+    };
   };
   
   require '../../includes/funciones.php';
