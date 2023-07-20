@@ -18,7 +18,7 @@
 }
 
 table.propiedades {
-  margin-top: 4rem;
+  margin-top: 3rem;
   width: 100%;
   border-spacing: 0;
 
@@ -30,8 +30,12 @@ table.propiedades {
       padding: 2rem;
     }
   }
-
+  
   .imagen-tabla {
     width: 10rem;
   }
+}
+
+.imagen-small {
+  width: 30rem;
 }

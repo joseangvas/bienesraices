@@ -1,4 +1,14 @@
 <?php
+  // Importar la Conexión
+  require '../includes/config/database.php';
+  $db = conectarDB();
+
+  // Escribir el Query
+  $query = "SELECT * FROM propiedades";
+
+  // Consultar la Base de Datos
+  $resultadoConsulta = mysqli_query($db, $query);
+  
   // Muestra Mensaje Condicional 
   $resultado = $_GET['resultado'] ?? null;
 
@@ -27,31 +37,27 @@
           </tr>
         </thead>
         
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td>Casa en La Playa</td>
-            <td><img src="/imagenes/bf82d8695c304405a8cfff9ca453d572.jpg" class="imagen-tabla"></td>
-            <td>$2500000</td>
-            <td>
-              <a href="#" class="boton-rojo-block">Eliminar</a>
-              <a href="#" class="boton-amarillo-block">Actualizar</a>
-            </td>
-          </tr>
+        <tbody>  <!-- Mostrar los Resultados -->
+          <?php while($propiedad = mysqli_fetch_assoc($resultadoConsulta)) : ?>
+            <tr>
+              <td><?php echo $propiedad['id']; ?></td>
+              <td><?php echo $propiedad['titulo']; ?></td>
+              <td><img src="/imagenes/<?php echo $propiedad['imagen']; ?>" class="imagen-tabla"></td>
+              <td><?php echo "$ " . $propiedad['precio']; ?></td>
+              <td>
+                <a href="#" class="boton-rojo-block">Eliminar</a>
+                <a href="/admin/propiedades/actualizar.php?id=<?php echo $propiedad['id']; ?>" class="boton-amarillo-block">Actualizar</a>
+              </td>
+            </tr>
+          <?php endwhile; ?>
         </tbody>
       </table>
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
+
     </main>
 
 <?php
+  // Cerrar la Conexión
+  mysqli_close($db);
+
   incluirTemplate('footer');
 ?>
