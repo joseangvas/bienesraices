@@ -5,7 +5,7 @@
 
   // Validar el id en la URL para que sea un Número Entero
   if(!$id) {
-    header('Location: /admin');
+    header('Location: /admin/index.php');
   }
 
   // Base de Datos
@@ -43,6 +43,8 @@
     // echo "<pre>";
     // var_dump($_FILES);
     // echo "</pre>";
+
+    // exit;
 
     $titulo = mysqli_real_escape_string($db, $_POST['titulo']);
     $precio = mysqli_real_escape_string($db, $_POST['precio']);
@@ -85,10 +87,6 @@
       $errores[] = "Debes Seleccionar un Vendedor";
     }
 
-    if( !$imagen['name'] || $imagen['error'] ) {
-      $errores[] = "La Imagen es Obligatoria";
-    }
-
     // Validar Archivo de imagen por Tamaño (1 MB. Máximo)
     $medida = 1000 * 1000;
 
@@ -98,32 +96,41 @@
 
     // Revisar que el Array de Errores esté Vacío
     if(empty($errores)) {
-
-      //**  SUBIDA DE ARCHIVOS  **//
-
       // Crear una Carpeta
       $carpetaImagenes = '../../imagenes/';
-
+      
       if(!is_dir($carpetaImagenes)) {
         mkdir($carpetaImagenes);
       }
+      
+      //* Validar si Existe una nueva Imagen para Borrar la Anterior *//
+      if($imagen['name']) {
+        // Eliminar la Imagen Previa //
+        unlink($carpetaImagenes . $propiedad['imagen']);
 
-      // Generar un Nombre Unico de Imagen
-      $nombreImagen = md5( uniqid( rand(), true)) . ".jpg";
-
-      // Subir la Imagen
-      move_uploaded_file( $imagen['tmp_name'], $carpetaImagenes . $nombreImagen );
-
+        // Generar un Nombre Unico de Imagen //
+        $nombreImagen = md5( uniqid( rand(), true)) . ".jpg";
+        
+        // Subir la Imagen //
+        move_uploaded_file( $imagen['tmp_name'], $carpetaImagenes . $nombreImagen );
+        $imagenPropiedad = $nombreImagen;
+      } else {
+        $nombreImagen = $propiedad['imagen'];
+      }
+      
+      //*  SUBIDA DE ARCHIVOS  *//
         // Insertar en la Base de Datos
-      $query = " INSERT INTO propiedades (titulo, precio, imagen, descripcion, habitaciones, wc, estacionamiento, creado, vendedores_Id ) VALUES ( '$titulo', '$precio', '$nombreImagen', '$descripcion', '$habitaciones', '$wc', '$estacionamiento', '$creado', '$vendedorId' ) ";
+      $query = " UPDATE propiedades SET titulo = '$titulo', precio = $precio, imagen = '$nombreImagen', descripcion = '$descripcion', habitaciones = $habitaciones, wc = $wc, estacionamiento = $estacionamiento, vendedores_id = $vendedorId WHERE id = $id ";
 
+      // Probar el Código de Actualización
       // echo $query;
+      // exit;
 
       $resultado = mysqli_query($db, $query);
 
       if($resultado) {
         // Redireccionar al Usuario
-        header('Location: /admin/index.php?resultado=1');
+        header('Location: /admin/index.php?resultado=2');
       };
     };
   };
@@ -143,7 +150,7 @@
         </div>
       <?php endforeach; ?>
 
-      <form class="formulario" method="POST" action="/admin/propiedades/crear.php" enctype="multipart/form-data">
+      <form class="formulario" method="POST" enctype="multipart/form-data">
         <fieldset>
           <legend>Información General</legend>
 
