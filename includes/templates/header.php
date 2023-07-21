@@ -32,8 +32,12 @@
           </div>
         </div>   <!-- .barra -->
 
-        <?php if($inicio) { ?>
-          <h1>Venta de Casas y Departamentos Exclusivos de Lujo</h1>
-        <?php } ?>
+        <!-- Mostrar Slogan con Código Ternario -->
+        <?php echo $inicio ? "<h1>Venta de Casas y Departamentos Exclusivos de Lujo</h1>" : ''; ?>
+
+        <!-- Mostrar Slogan con Código Normal -->
+        <?php // if($inicio) { ?>
+          <!-- <h1>Venta de Casas y Departamentos Exclusivos de Lujo</h1> -->
+        <?php // } ?>
       </div>
     </header>

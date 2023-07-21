@@ -20,6 +20,11 @@
 
   //* OBTENER RESULTADOS
   $resultado = mysqli_query($db, $query);
+
+  if(!$resultado->num_rows) {
+    header('Location: /');
+  }
+
   $propiedad = mysqli_fetch_assoc($resultado);
 
 ?>
@@ -52,5 +57,8 @@
     </main>
 
 <?php
+  // Cerrar Conexión a DB
+  mysqli_close($db);
+
   incluirTemplate('footer');
 ?>
