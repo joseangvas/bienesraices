@@ -1,6 +1,8 @@
 <?php
   require 'includes/funciones.php';
   incluirTemplate('header', $inicio = true);
+
+  var_dump($auth);
 ?>
 
     <main class="contenedor seccion">

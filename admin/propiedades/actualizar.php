@@ -1,27 +1,36 @@
 <?php
-  // Obtener id de la Propiedad a Consultar y Validar si es Entero
+  require '../../includes/funciones.php';
+
+  //* Autenticar el Usuario
+  $auth = estaAutenticado();
+
+  if(!$auth) {
+    header('Location: /');
+  }
+
+  //* Obtener id de la Propiedad a Consultar y Validar si es Entero
   $id = $_GET['id'];
   $id = filter_var($id, FILTER_VALIDATE_INT);
 
-  // Validar el id en la URL para que sea un Número Entero
+  //* Validar el id en la URL para que sea un Número Entero
   if(!$id) {
     header('Location: /admin/index.php');
   }
 
-  // Base de Datos
+  //* Base de Datos
   require '../../includes/config/database.php';
   $db = conectarDB();
 
-  // Consulta para Obtener los Datos de la Propiedad
+  //* Consulta para Obtener los Datos de la Propiedad
   $consulta = "SELECT * FROM propiedades where id = $id";
   $resultado = mysqli_query($db, $consulta);
   $propiedad = mysqli_fetch_assoc($resultado);
 
-  // Consultar para obtener los Vendedores
+  //* Consultar para obtener los Vendedores
   $consulta = "SELECT * FROM vendedores";
   $resultado = mysqli_query($db, $consulta);
 
-  // Arreglo con Mensaje de Errores
+  //* Arreglo con Mensaje de Errores
   $errores = [];
 
   $titulo = $propiedad['titulo'];
@@ -33,7 +42,7 @@
   $vendedorId = $propiedad['vendedorId'];
   $imagenPropiedad = $propiedad['imagen'];
 
-  // Ejecutar el Código después de que el Usuario envía el Formulario
+  //* Ejecutar el Código después de que el Usuario envía el Formulario
   if($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // echo "<pre>";
@@ -55,10 +64,10 @@
     $vendedorId = mysqli_real_escape_string($db, $_POST['vendedor']);
     $creado = date('Y/m/d');
 
-    // Asignar Files hacia una Variable
+    //* Asignar Files hacia una Variable
     $imagen = $_FILES['imagen'];
 
-    // Validar entrada de Datos
+    //* Validar entrada de Datos
     if(!$titulo) {
       $errores[] = "Debes Ingresar un Título";
     }
@@ -87,7 +96,7 @@
       $errores[] = "Debes Seleccionar un Vendedor";
     }
 
-    // Validar Archivo de imagen por Tamaño (1 MB. Máximo)
+    //* Validar Archivo de imagen por Tamaño (1 MB. Máximo)
     $medida = 1000 * 1000;
 
     if( $imagen['size'] > $medida ) {
@@ -96,7 +105,7 @@
 
     // Revisar que el Array de Errores esté Vacío
     if(empty($errores)) {
-      // Crear una Carpeta
+      //* Crear una Carpeta
       $carpetaImagenes = '../../imagenes/';
       
       if(!is_dir($carpetaImagenes)) {
@@ -105,13 +114,13 @@
       
       //* Validar si Existe una nueva Imagen para Borrar la Anterior *//
       if($imagen['name']) {
-        // Eliminar la Imagen Previa //
+        //* Eliminar la Imagen Previa //
         unlink($carpetaImagenes . $propiedad['imagen']);
 
-        // Generar un Nombre Unico de Imagen //
+        //* Generar un Nombre Unico de Imagen //
         $nombreImagen = md5( uniqid( rand(), true)) . ".jpg";
         
-        // Subir la Imagen //
+        //* Subir la Imagen //
         move_uploaded_file( $imagen['tmp_name'], $carpetaImagenes . $nombreImagen );
         $imagenPropiedad = $nombreImagen;
       } else {
@@ -119,7 +128,7 @@
       }
       
       //*  SUBIDA DE ARCHIVOS  *//
-        // Insertar en la Base de Datos
+        //* Insertar en la Base de Datos
       $query = " UPDATE propiedades SET titulo = '$titulo', precio = $precio, imagen = '$nombreImagen', descripcion = '$descripcion', habitaciones = $habitaciones, wc = $wc, estacionamiento = $estacionamiento, vendedores_id = $vendedorId WHERE id = $id ";
 
       // Probar el Código de Actualización
@@ -129,13 +138,12 @@
       $resultado = mysqli_query($db, $query);
 
       if($resultado) {
-        // Redireccionar al Usuario
+        //* Redireccionar al Usuario
         header('Location: /admin/index.php?resultado=2');
       };
     };
   };
   
-  require '../../includes/funciones.php';
   incluirTemplate('header');
 ?>
 
@@ -199,5 +207,6 @@
     </main>
 
 <?php
+  mysqli_close($db);
   incluirTemplate('footer');
 ?>

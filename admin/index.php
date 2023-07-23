@@ -1,15 +1,24 @@
 <?php
-  // Importar la Conexión
+  require '../includes/funciones.php';
+
+  //* Autenticar el Usuario
+  $auth = estaAutenticado();
+
+  if(!$auth) {
+    header('Location: /');
+  }
+
+  //* Importar la Conexión
   require '../includes/config/database.php';
   $db = conectarDB();
 
-  // Escribir el Query
+  //* Escribir el Query
   $query = "SELECT * FROM propiedades";
 
-  // Consultar la Base de Datos
+  //* Consultar la Base de Datos
   $resultadoConsulta = mysqli_query($db, $query);
   
-  // Muestra Mensaje Condicional 
+  //* Muestra Mensaje Condicional 
   $resulta = $_GET['resultado'] ?? null;
 
   //* Realizar Borrado de Registro en la Tabla *//
@@ -44,8 +53,7 @@
     }
   }
 
-  // Incluye un Template
-  require '../includes/funciones.php';
+  //* Incluye un Template
   incluirTemplate('header');
 ?>
 
@@ -95,7 +103,7 @@
     </main>
 
 <?php
-  // Cerrar la Conexión
+  //* Cerrar la Conexión
   mysqli_close($db);
 
   incluirTemplate('footer');
