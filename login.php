@@ -37,7 +37,7 @@
 
           //* Llenar el Arreglo de la Sesión
           $_SESSION['usuario'] = $usuario['email'];
-          $_SESSION['LOGIN'] = true;
+          $_SESSION['login'] = true;
 
           header('Location: /admin/index.php');
 
@@ -48,10 +48,7 @@
       } else {
         $errores[] = "El Usuario No Existe";
       }
-
-
-      //TODO: header('Location: login.php?resultado=1');
-    }
+     }
   }
 
   //* Incluir el Header
