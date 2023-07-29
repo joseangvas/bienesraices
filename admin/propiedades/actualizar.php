@@ -1,12 +1,7 @@
 <?php
   require '../../includes/app.php';
 
-  //* Autenticar el Usuario
-  $auth = estaAutenticado();
-
-  if(!$auth) {
-    header('Location: /');
-  }
+  estaAutenticado();
 
   //* Obtener id de la Propiedad a Consultar y Validar si es Entero
   $id = $_GET['id'];
@@ -16,10 +11,6 @@
   if(!$id) {
     header('Location: /admin/index.php');
   }
-
-  //* Base de Datos
-  require '../../includes/config/database.php';
-  $db = conectarDB();
 
   //* Consulta para Obtener los Datos de la Propiedad
   $consulta = "SELECT * FROM propiedades where id = $id";
