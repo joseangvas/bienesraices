@@ -1,6 +1,6 @@
 <?php
   //* Importar la Conexión
-  require 'includes/config/database.php';
+  // require 'includes/config/database.php';
   $db = conectarDB();
 
   //* Crear un E-mail y Password

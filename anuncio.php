@@ -1,5 +1,5 @@
 <?php
-  require 'includes/funciones.php';
+  require 'includes/app.php';
   incluirTemplate('header');
 
   //* Obtener id de la Propiedad a Consultar y Validar si es Entero

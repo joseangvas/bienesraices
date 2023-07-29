@@ -1,6 +1,5 @@
 <?php
-  //* IMPORTAR LA CONEXION
-  include __DIR__ . '/../config/database.php';
+  //* CREAR LA CONEXION
   $db = conectarDB();
 
   //* CONSULTAR TABLAS
@@ -8,7 +7,6 @@
 
   //* OBTENER RESULTADOS
   $resultado = mysqli_query($db, $query);
-
 
 
 ?>
