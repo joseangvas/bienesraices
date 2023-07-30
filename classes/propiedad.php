@@ -44,7 +44,19 @@ class Propiedad {
   }
 
   //* GUARDAR DATOS EN LA BASE DE DATOS
+  //* Comprobar el Tipo de Guardado en la Base de Datos
   public function guardar() {
+    if (isset($this->id)) {
+      // Actualizar el Registro
+      $this->actualizar();
+    } else {
+      // Insertar el Registro
+      $this->crear();
+    }
+  }
+
+  //* INSERTAR PROPIEDAD EN LA BASE DE DATOS
+  public function crear() {
     //* Sanitizar los Datos
     $atributos = $this->sanitizarAtributos();
 
@@ -60,6 +72,29 @@ class Propiedad {
     return $resultado;
   }
 
+  //* ACTUALIZAR PROPIEDAD EN LA BASE DE DATOS
+  public function actualizar() {
+    //* Sanitizar los Datos
+    $atributos = $this->sanitizarAtributos();
+
+    $valores = [];
+    foreach($atributos as $key => $value) {
+      $valores[] = "{$key}='{$value}'";
+    }
+
+    $query = "UPDATE propiedades SET ";
+    $query .= join(', ', $valores);
+    $query .= " WHERE id = '" . self::$db->escape_string($this->id) . "' ";
+    $query .= " LIMIT 1";
+
+    $resultado = self::$db->query($query);
+
+    if($resultado) {
+      //* Redireccionar al Usuario
+      header('Location: /admin/index.php?resultado=2');
+    };
+  }
+
   //* Identificar y Unir los Atributos de la BD
   public function atributos() {
     $atributos = [];
@@ -73,6 +108,16 @@ class Propiedad {
 
   //* Subida de Archivo de Imagen
   public function setImagen($imagen) {
+    // Eliminar la Imagen Previa
+    if(isset($this->id)) {
+      // Comprobar si Existe el Archivo
+      $existeArchivo = file_exists(CARPETA_IMAGENES . $this->imagen);
+
+      if($existeArchivo) {
+        unlink(CARPETA_IMAGENES . $this->imagen);
+      }
+    }
+
     // Asignar al Atributo de Imagen el Nombre de la Imagen
     if($imagen) {
       $this->imagen = $imagen;
@@ -96,8 +141,8 @@ class Propiedad {
     return self::$errores;
   }
 
+  //* Validar entrada de Datos
   public function validar() {
-      //* Validar entrada de Datos
       if(!$this->titulo) {
         self::$errores[] = "Debes Ingresar un Título";
       }
@@ -133,7 +178,7 @@ class Propiedad {
       return self::$errores;
    }
 
-   //* Listar Todas las Propiedades
+   //* Listar Todos los Registros
    public static function all() {
     $query = "SELECT * FROM propiedades";
 
@@ -142,8 +187,16 @@ class Propiedad {
     return $resultado;
    }
 
+   //* Buscar un Registro por su ID
+   public static function find($id) {
+    $query = "SELECT * FROM propiedades WHERE id = $id";
+    $resultado = self::consultarSQL($query);
+
+    return array_shift($resultado);
+   }
+
+   //* Consultar la Base de Datos
    public static function consultarSQL($query) {
-    //* Consultar la Base de Datos
     $resultado = self::$db->query($query);
 
     //* Iterar los Resultados
@@ -171,4 +224,14 @@ class Propiedad {
 
     return $objeto;
    }
+
+   //* Sincroniza el Objeto en Memoria con los Cambios Realizados por el Usuario
+   public function sincronizar( $args = [] ) {
+    foreach($args as $key => $value) {
+      if(property_exists($this, $key) && !is_null($value)) {
+        $this->$key = $value;
+      }
+    }
+   }
+
 }
