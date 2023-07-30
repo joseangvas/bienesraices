@@ -46,7 +46,7 @@ class Propiedad {
   //* GUARDAR DATOS EN LA BASE DE DATOS
   //* Comprobar el Tipo de Guardado en la Base de Datos
   public function guardar() {
-    if (isset($this->id)) {
+    if (!is_null($this->id)) {
       // Actualizar el Registro
       $this->actualizar();
     } else {
@@ -69,7 +69,12 @@ class Propiedad {
 
     $resultado = self::$db->query($query);
 
-    return $resultado;
+    //* Mensaje de Exito al Guardar
+    if($resultado) {
+      //* Redireccionar al Usuario
+      header('Location: /admin/?resultado=1');
+    };
+
   }
 
   //* ACTUALIZAR PROPIEDAD EN LA BASE DE DATOS
@@ -77,11 +82,13 @@ class Propiedad {
     //* Sanitizar los Datos
     $atributos = $this->sanitizarAtributos();
 
+    //* Llenar Array con las Claves y Valores de la BD
     $valores = [];
     foreach($atributos as $key => $value) {
       $valores[] = "{$key}='{$value}'";
     }
 
+    //* Actualizar Datos en la DB
     $query = "UPDATE propiedades SET ";
     $query .= join(', ', $valores);
     $query .= " WHERE id = '" . self::$db->escape_string($this->id) . "' ";
@@ -89,11 +96,26 @@ class Propiedad {
 
     $resultado = self::$db->query($query);
 
+    //* Mensaje de Exito al Guardar
     if($resultado) {
       //* Redireccionar al Usuario
       header('Location: /admin/index.php?resultado=2');
     };
   }
+
+  //* Eliminar un Registro de Propiedad
+  public function eliminar() {
+    // Eliminar Registro
+    $query = "DELETE FROM propiedades WHERE id = " . self::$db->escape_string($this->id) . " LIMIT 1";
+    $resultado = self::$db->query($query);
+
+    if($resultado) {
+      $this->borrarImagen();
+      header('Location: /admin?resultado=3');
+    }
+  }
+
+
 
   //* Identificar y Unir los Atributos de la BD
   public function atributos() {
@@ -109,18 +131,24 @@ class Propiedad {
   //* Subida de Archivo de Imagen
   public function setImagen($imagen) {
     // Eliminar la Imagen Previa
-    if(isset($this->id)) {
-      // Comprobar si Existe el Archivo
-      $existeArchivo = file_exists(CARPETA_IMAGENES . $this->imagen);
-
-      if($existeArchivo) {
-        unlink(CARPETA_IMAGENES . $this->imagen);
-      }
+    if(!is_null($this->id)) {
+      $this->borrarImagen();
     }
 
     // Asignar al Atributo de Imagen el Nombre de la Imagen
     if($imagen) {
       $this->imagen = $imagen;
+    }
+  }
+
+  //* Eliminar el Archivo de Imagen
+  public function borrarImagen() {
+    // Comprobar si Existe el Archivo
+    $existeArchivo = file_exists(CARPETA_IMAGENES . $this->imagen);
+
+    // Borrar el Archivo
+    if($existeArchivo) {
+      unlink(CARPETA_IMAGENES . $this->imagen);
     }
   }
 

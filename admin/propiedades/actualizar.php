@@ -18,7 +18,6 @@
 
   //* Consulta para Obtener los Datos de la Propiedad
   $propiedad = Propiedad::find($id);
-
   
   //* Consultar para obtener los Vendedores
   $consulta = "SELECT * FROM vendedores";
