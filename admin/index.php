@@ -5,10 +5,12 @@
   estaAutenticado();
 
   use App\Propiedad;
+  use App\Vendedor;
 
   //* Implementar un Método para Obtener todas las Propiedades
   //* Usando Active Record
   $propiedades = Propiedad::all();
+  $vendedores = Vendedor::all();
 
   //* Muestra Mensaje Condicional 
   $resulta = $_GET['resultado'] ?? null;
