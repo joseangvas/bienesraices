@@ -1,6 +1,7 @@
 <?php
 
   use App\Propiedad;
+  use App\Vendedor;
   use Intervention\Image\ImageManagerStatic as Image;
 
   require '../../includes/app.php';
@@ -19,9 +20,8 @@
   //* Consulta para Obtener los Datos de la Propiedad
   $propiedad = Propiedad::find($id);
   
-  //* Consultar para obtener los Vendedores
-  $consulta = "SELECT * FROM vendedores";
-  $resultado = mysqli_query($db, $consulta);
+  //* Consulta para Obtener Todos los Vendedores
+  $vendedores = Vendedor::all();
 
   //* Arreglo con Mensaje de Errores
   $errores = Propiedad::getErrores();
@@ -51,8 +51,10 @@
 
     //* Revisar que el Array de Errores esté Vacío
     if(empty($errores)) {
-      //* Guardar la Imagen en el Servidor
-      $image->save(CARPETA_IMAGENES . $nombreImagen);
+      if($_FILES['propiedad']['tmp_name']['imagen']) {
+        //* Guardar la Imagen en el Servidor
+        $image->save(CARPETA_IMAGENES . $nombreImagen);
+      }
 
       //* Insertar en la Base de Datos
       $propiedad->guardar();

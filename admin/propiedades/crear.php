@@ -13,7 +13,6 @@
   //* Consulta para Obtener Todos los Vendedores
   $vendedores = Vendedor::all();
 
-
   //* Arreglo con Mensaje de Errores
   $errores = Propiedad::getErrores();
 
@@ -55,25 +54,25 @@
   incluirTemplate('header');
 ?>
 
-    <main class="contenedor seccion">
-      <h1>Crear</h1>
+  <main class="contenedor seccion">
+    <h1>Registrar Propiedad</h1>
 
-      <a href="/admin/index.php" class="boton boton-verde">Volver</a>
+    <a href="/admin/index.php" class="boton boton-verde">Volver</a>
 
-      <?php foreach($errores as $error): ?>
-        <div class="alerta error">
-          <?php echo $error; ?>
-        </div>
-      <?php endforeach; ?>
+    <?php foreach($errores as $error): ?>
+      <div class="alerta error">
+        <?php echo $error; ?>
+      </div>
+    <?php endforeach; ?>
 
-      <form class="formulario" method="POST" action="/admin/propiedades/crear.php" enctype="multipart/form-data">
+    <form class="formulario" method="POST" action="/admin/propiedades/crear.php" enctype="multipart/form-data">
 
-        <?php include '../../includes/templates/formulario_propiedades.php' ?> 
+      <?php include '../../includes/templates/formulario_propiedades.php' ?> 
 
-        <input type="submit" value="Crear Propiedad" class="boton boton-verde">
-      </form>
+      <input type="submit" value="Crear Propiedad" class="boton boton-verde">
+    </form>
 
-    </main>
+  </main>
 
 <?php
   mysqli_close($db);
