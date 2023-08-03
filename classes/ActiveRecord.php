@@ -18,7 +18,7 @@ class ActiveRecord {
     self::$db = $database;
   }
 
-  //* GUARDAR DATOS EN LA BASE DE DATOS
+  //* GUARDAR DATOS EN LA BASE DE DATOS (Registros CRUD)
   //* Comprobar el Tipo de Guardado en la Base de Datos
   public function guardar() {
     if(!is_null($this->id)) {
@@ -158,6 +158,15 @@ class ActiveRecord {
 
     return $resultado;
   }
+
+  //* Obtener Determinado Número de Registros
+  public static function get($cantidad) {
+    $query = "SELECT * FROM " . static::$tabla . " LIMIT " . $cantidad;
+
+    $resultado = self::consultarSQL($query);
+
+    return $resultado;
+  }  
 
   //* Buscar un Registro por su ID
   public static function find($id) {
